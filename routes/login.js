@@ -1,23 +1,23 @@
 const express = require("express");
 const { v4: uuidV4 } = require("uuid");
 const request = require("request");
-const fs = require("fs");
 const router = express.Router();
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
   const state = uuidV4();
 
-  res.redirect(
-    `${process.env.ACCOUNT_SPOTIFY_BASE_URL}authorize?` +
+  res.send({
+    url:
+      `${process.env.ACCOUNT_SPOTIFY_BASE_URL}authorize?` +
       new URLSearchParams({
         response_type: "code",
         client_id: process.env.CLIENT_ID,
         scope: process.env.SCOPE,
         redirect_uri: process.env.REDIRECT_URL,
         state: state,
-      })
-  );
+      }),
+  });
 });
 
 router.get("/redirectURI", (req, res, next) => {
@@ -53,8 +53,11 @@ router.get("/redirectURI", (req, res, next) => {
           scope: body.scope,
           expires_in: body.expires_in,
         };
-        fs.writeFileSync("access_token.txt", object.access_token);
-        res.send(object);
+        res.redirect(
+          `${process.env.FRONTEND_URL}login/redirectURI?${new URLSearchParams({
+            token: object.access_token,
+          })}`
+        );
       }
     });
   }

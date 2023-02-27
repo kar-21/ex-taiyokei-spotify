@@ -5,10 +5,11 @@ const router = express.Router();
 
 router.get("/me", (req, res, next) => {
   const accessToken = fs.readFileSync("./access_token.txt");
+  console.log('>>>>> req', req.headers.authorization)
   const authOptions = {
     url: `${process.env.SPOTIFY_BASE_URL}v1/me`,
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: req.headers.authorization,
     },
   };
   request(authOptions, (error, response, body) => {
