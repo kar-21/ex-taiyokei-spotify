@@ -1,6 +1,5 @@
 const express = require("express");
 const request = require("request");
-const fs = require("fs");
 const router = express.Router();
 
 router.get("/featured-playlists", (req, res, next) => {
@@ -12,13 +11,11 @@ router.get("/featured-playlists", (req, res, next) => {
   };
   request(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
-      console.log(">>>>>", body);
       res.send(body);
     }
   });
 });
 router.get("/categories", (req, res, next) => {
-  console.log(">>>>> cat", req.query.offset);
   const authOptions = {
     url: `${
       process.env.SPOTIFY_BASE_URL
@@ -37,12 +34,11 @@ router.get("/categories", (req, res, next) => {
   });
 });
 
-router.get("/category/playlists", (req, res, next) => {
-    console.log(">>>>> cat", req.params.offset);
+router.get("/category/playlists/", (req, res, next) => {
     const authOptions = {
       url: `${
         process.env.SPOTIFY_BASE_URL
-      }v1/browse/categories/${req.params.categoryId}/playlists`,
+      }v1/browse/categories/${req.query.categoryId}/playlists?offset=${req.query.offset}`,
       headers: {
         Authorization: req.headers.authorization,
       },
@@ -64,7 +60,6 @@ router.get("/available-genre", (req, res, next) => {
   };
   request(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
-      console.log(">>>>>", body);
       res.send(body);
     }
   });
