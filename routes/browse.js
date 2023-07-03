@@ -12,6 +12,9 @@ router.get("/featured-playlists", (req, res, next) => {
   request(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       res.send(body);
+    } else {
+      const errorBody = JSON.parse(body);
+      res.status(errorBody.error.status).send(errorBody.error.message);
     }
   });
 });
@@ -28,28 +31,30 @@ router.get("/categories", (req, res, next) => {
   };
   request(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
-        console.log(">>>>>", response);
       res.send(body);
+    } else {
+      const errorBody = JSON.parse(body);
+      res.status(errorBody.error.status).send(errorBody.error.message);
     }
   });
 });
 
 router.get("/category/playlists/", (req, res, next) => {
-    const authOptions = {
-      url: `${
-        process.env.SPOTIFY_BASE_URL
-      }v1/browse/categories/${req.query.categoryId}/playlists?offset=${req.query.offset}`,
-      headers: {
-        Authorization: req.headers.authorization,
-      },
-    };
-    request(authOptions, (error, response, body) => {
-      if (!error && response.statusCode === 200) {
-          console.log(">>>>>", response);
-        res.send(body);
-      }
-    });
+  const authOptions = {
+    url: `${process.env.SPOTIFY_BASE_URL}v1/browse/categories/${req.query.categoryId}/playlists?offset=${req.query.offset}`,
+    headers: {
+      Authorization: req.headers.authorization,
+    },
+  };
+  request(authOptions, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      res.send(body);
+    } else {
+      const errorBody = JSON.parse(body);
+      res.status(errorBody.error.status).send(errorBody.error.message);
+    }
   });
+});
 
 router.get("/available-genre", (req, res, next) => {
   const authOptions = {
@@ -61,6 +66,9 @@ router.get("/available-genre", (req, res, next) => {
   request(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       res.send(body);
+    } else {
+      const errorBody = JSON.parse(body);
+      res.status(errorBody.error.status).send(errorBody.error.message);
     }
   });
 });
