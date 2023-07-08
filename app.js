@@ -6,11 +6,11 @@ const logger = require("morgan");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
-const indexRouter = require("./routes/index");
-const loginRouter = require("./routes/login");
-const userProfileRouter = require("./routes/userProfile");
-const browseRouter = require("./routes/browse");
-const playlistRouter = require("./routes/playlist");
+const indexRouter = require("./routes/index.router");
+const loginRouter = require("./routes/login.router");
+const userProfileRouter = require("./routes/userProfile.router");
+const browseRouter = require("./routes/browse.router");
+const playlistRouter = require("./routes/playlist.router");
 
 const app = express();
 dotenv.config();

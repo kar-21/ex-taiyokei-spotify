@@ -1,12 +1,8 @@
-const express = require("express");
 const { v4: uuidV4 } = require("uuid");
 const request = require("request");
-const router = express.Router();
 
-/* GET home page. */
-router.get("/", (req, res, next) => {
+exports.getLoginUri = (req, res, next) => {
   const state = uuidV4();
-
   res.send({
     url:
       `${process.env.ACCOUNT_SPOTIFY_BASE_URL}authorize?` +
@@ -18,9 +14,9 @@ router.get("/", (req, res, next) => {
         state: state,
       }),
   });
-});
+};
 
-router.get("/redirectURI", (req, res, next) => {
+exports.getRedirectUri = (req, res, next) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
   if (state === null) {
@@ -65,9 +61,9 @@ router.get("/redirectURI", (req, res, next) => {
       }
     });
   }
-});
+};
 
-router.get("/refreshToken", (req, res, next) => {
+exports.getRefreshToken = (req, res, next) => {
   const authOptions = {
     url: `${process.env.ACCOUNT_SPOTIFY_BASE_URL}api/token`,
     form: {
@@ -98,6 +94,4 @@ router.get("/refreshToken", (req, res, next) => {
       res.status(errorBody.error.status).send(errorBody.error.message);
     }
   });
-});
-
-module.exports = router;
+};

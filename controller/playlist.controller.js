@@ -1,8 +1,6 @@
-const express = require("express");
 const request = require("request");
-const router = express.Router();
 
-router.get("/", (req, res, next) => {
+exports.getPlaylist = (req, res, next) => {
   const authOptions = {
     url: `${process.env.SPOTIFY_BASE_URL}v1/playlists/${req.query.playlistId}/tracks?offset=${req.query.offset}`,
     headers: {
@@ -14,6 +12,4 @@ router.get("/", (req, res, next) => {
       res.send(body);
     }
   });
-});
-
-module.exports = router;
+};
