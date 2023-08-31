@@ -11,7 +11,6 @@ exports.getFeaturePlaylist = (req, res, next) => {
     if (!error && response.statusCode === 200) {
       res.send(body);
     } else {
-      console.log(body)
       const errorBody = JSON.parse(body);
       res.status(errorBody.error.status).send(errorBody.error.message);
     }

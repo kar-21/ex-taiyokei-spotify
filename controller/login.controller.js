@@ -80,7 +80,6 @@ exports.getRefreshToken = (req, res, next) => {
 
   request.post(authOptions, (error, response, body) => {
     if (!error && response.statusCode === 200) {
-      console.log(">>>> refresh", response, body);
       const object = {
         access_token: body.access_token,
         token_type: body.token_type,
@@ -90,8 +89,15 @@ exports.getRefreshToken = (req, res, next) => {
       };
       res.send(object);
     } else {
-      const errorBody = JSON.parse(body);
-      res.status(errorBody.error.status).send(errorBody.error.message);
+      try {
+        let errorBody = body;
+        if (typeof errorBody !== "object") {
+          errorBody = JSON.parse(body);
+        }
+        res.status(errorBody.error.status).send(errorBody.error.message);
+      } catch (error) {
+        res.status(500).send(body);
+      }
     }
   });
 };
